@@ -23,15 +23,3 @@
     @apply bg-background text-text transition-colors duration-300;
   }
 }
-
-.theme-toggle {
-  @apply relative h-6 w-12 rounded-full bg-secondary transition-colors duration-300;
-}
-
-.theme-toggle-thumb {
-  @apply absolute left-0.5 top-0.5 h-5 w-5 transform rounded-full bg-white transition-transform duration-300;
-}
-
-.theme-toggle[data-state="checked"] .theme-toggle-thumb {
-  @apply translate-x-6;
-}

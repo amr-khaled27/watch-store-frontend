@@ -8,17 +8,14 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="theme-toggle group relative inline-flex items-center justify-center overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-      data-state={theme === "dark" ? "checked" : "unchecked"}
+      className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-secondary hover:bg-secondary/90 transition-colors"
       aria-label="Toggle theme"
     >
-      <span className="theme-toggle-thumb flex items-center justify-center">
-        {theme === "light" ? (
-          <Sun className="h-3 w-3 text-secondary" />
-        ) : (
-          <Moon className="h-3 w-3 text-secondary" />
-        )}
-      </span>
+      {theme === "light" ? (
+        <Sun className="h-5 w-5 text-background" />
+      ) : (
+        <Moon className="h-5 w-5 text-background" />
+      )}
     </button>
   );
 }
