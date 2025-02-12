@@ -26,6 +26,9 @@ export default {
         secondary: "var(--secondary)",
         accent: "var(--accent)",
       },
+      fontFamily: {
+        pattya: ["Cormorant", "serif"],
+      },
       keyframes: {
         "fade-in": {
           "0%": { opacity: "0" },
