@@ -22,12 +22,14 @@ export default {
       colors: {
         text: "var(--text)",
         background: "var(--background)",
+        backgroundAlpha: "var(--background-alpha)",
         primary: "var(--primary)",
         secondary: "var(--secondary)",
         accent: "var(--accent)",
       },
       fontFamily: {
         pattya: ["Cormorant", "serif"],
+        inter: ["Inter", "sans-serif"],
       },
       keyframes: {
         "fade-in": {

@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +8,7 @@
   :root {
     --text: #051a17;
     --background: #e9fbf8;
+    --background-alpha: #e9fbf879;
     --primary: #157e72;
     --secondary: #7973e8;
     --accent: #7e21c4;
@@ -14,6 +16,7 @@
   .dark {
     --text: #e3faf7;
     --background: #041613;
+    --background-alpha: #0416137a;
     --primary: #7fe9dc;
     --secondary: #1d178b;
     --accent: #993cde;
