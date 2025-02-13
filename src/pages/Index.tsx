@@ -1,6 +1,39 @@
 import NavHeader from "@/components/NavHeader";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+interface Product {
+  id: string;
+  name: string;
+  image_url: string;
+  description: string;
+  price: number;
+}
 
 const Index = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  useEffect(() => {
+    console.log("Index page mounted");
+
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/fetch/products",
+          {
+            headers: {
+              Authorization: `Bearer 75e8cd5b-c49a-47e0-9bde-9f9b8ee15ec2`,
+            },
+          }
+        );
+
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
   return (
     <>
       <NavHeader />
@@ -13,7 +46,11 @@ const Index = () => {
         </h2>
       </div>
 
-      <div className="h-screen bg-background"></div>
+      <div className="min-h-screen bg-background font-inter space-y-4">
+        <h3 className="text-center text-3xl text-text text-balance font-semibold">
+          Browse our exquisite collection
+        </h3>
+      </div>
     </>
   );
 };
