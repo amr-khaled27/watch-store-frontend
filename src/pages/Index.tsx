@@ -27,6 +27,7 @@ const Index = () => {
         );
 
         console.log(response.data);
+        setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -46,10 +47,39 @@ const Index = () => {
         </h2>
       </div>
 
-      <div className="min-h-screen bg-background font-inter space-y-4">
+      <div className="min-h-screen bg-background font-inter space-y-24">
         <h3 className="text-center text-3xl text-text text-balance font-semibold">
           Browse our exquisite collection
         </h3>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="bg-background shadow-md rounded-lg overflow-hidden"
+            >
+              <img
+                src={`http://localhost:8000/${product.image_url}`}
+                alt={product.name}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4 flex flex-col justify-between h-[225px]">
+                <div>
+                  <h4 className="text-lg font-semibold">{product.name}</h4>
+                  <p className="text-gray-600">{product.description}</p>
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                  <p className="text-accent font-bold">
+                    ${product.price.toFixed(2)}
+                  </p>
+                  <button className="bg-accent text-background px-4 py-2 rounded-md">
+                    Add to cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
