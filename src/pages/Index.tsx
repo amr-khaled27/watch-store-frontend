@@ -56,7 +56,7 @@ const Index = () => {
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-background shadow-md rounded-lg overflow-hidden"
+              className="bg-background shadow-xl rounded-xl outline outline-1 outline-transparent hover:outline-text transition-[outline] duration-300 overflow-hidden"
             >
               <img
                 src={`http://localhost:8000/${product.image_url}`}
