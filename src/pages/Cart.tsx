@@ -27,13 +27,11 @@ export default function CartPage() {
       });
     }
     fetchData().then((response) => {
-      console.log(response.data);
       const list: CartItem[] = [];
       response.data.map((item) => {
         item.product.quantity = item.quantity;
         list.push(item.product);
       });
-      console.log(list);
       setCartItems(list);
     });
   }, [user]);

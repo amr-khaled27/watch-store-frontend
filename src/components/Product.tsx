@@ -65,7 +65,7 @@ const Product: React.FC<ProductProps> = ({
           <p className="text-accent font-bold">${price.toFixed(2)}</p>
           <button
             onClick={() => handleAddToCart(id)}
-            className="bg-accent text-background w-[110px] px-4 py-2 rounded-md"
+            className="bg-accent text-background w-[120px] px-4 py-2 rounded-md"
           >
             {awaitingResponse ? (
               <BeatLoader size={8} color="#cacaca" />
