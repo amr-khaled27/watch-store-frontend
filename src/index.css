@@ -22,8 +22,9 @@
     --secondary: #1d178b;
     --accent: #993cde;
   }
+}
 
-  body {
-    @apply bg-background text-text;
-  }
+html {
+  background-color: #041613;
+  color: var(--text);
 }

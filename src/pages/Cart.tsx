@@ -1,7 +1,8 @@
 import { useAuth } from "@/context/useAuth";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import CartItem from "@/components/CartItem";
 
 interface CartItem {
   id: string;
@@ -45,7 +46,7 @@ export default function CartPage() {
   const total = subtotal + shipping;
 
   return (
-    <div className="min-h-screen bg-background text-text">
+    <div className="min-h-screen animate-fade-in bg-background text-text">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center gap-2 mb-8">
           <ShoppingCart className="w-8 h-8 text-primary" />
@@ -56,40 +57,13 @@ export default function CartPage() {
           <div className="lg:col-span-2">
             <div className="bg-background-alpha backdrop-blur-sm rounded-xl p-6 shadow-lg">
               {cartItems.map((item) => (
-                <div
+                <CartItem
                   key={item.id}
-                  className="flex items-center gap-4 py-4 border-b border-primary/20 last:border-0"
-                >
-                  <img
-                    src={`http://localhost:8000/${item.image_url}`}
-                    alt={item.name}
-                    className="w-24 h-24 object-cover rounded-lg"
-                  />
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold">{item.name}</h3>
-                    <p className="text-primary font-medium">
-                      ${item.price.toFixed(2)}
-                    </p>
-
-                    <div className="flex items-center gap-4 mt-2">
-                      <div className="flex items-center gap-2 bg-background rounded-lg">
-                        <button className="p-1 hover:text-accent transition-colors">
-                          <Minus className="w-5 h-5" />
-                        </button>
-                        <span className="w-8 text-center">{item.quantity}</span>
-                        <button className="p-1 hover:text-accent transition-colors">
-                          <Plus className="w-5 h-5" />
-                        </button>
-                      </div>
-                      <button className="text-accent hover:text-accent/80 transition-colors">
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="text-lg font-bold">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </div>
-                </div>
+                  item={item}
+                  onIncrease={() => console.log(`Increase: ${item.name}`)}
+                  onDecrease={() => console.log(`Decrease: ${item.name}`)}
+                  onRemove={() => console.log(`Remove ${item.name}`)}
+                />
               ))}
             </div>
           </div>
