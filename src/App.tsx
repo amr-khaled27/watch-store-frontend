@@ -5,8 +5,9 @@ import Index from "./pages/Index";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Profile from "./pages/Profile";
-import NotFound from "./pages/NotFound";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
             <Route path="/auth/signin" element={<Signin />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/cart/checkout" element={<Checkout />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

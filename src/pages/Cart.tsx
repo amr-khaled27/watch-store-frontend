@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import CartItem from "@/components/CartItem";
 import { PuffLoader } from "react-spinners";
 
-interface CartItem {
+export interface CartItem {
   id: string;
   name: string;
   price: number;
@@ -36,9 +36,9 @@ export default function CartPage() {
         item.product.quantity = item.quantity;
         list.push(item.product);
       });
+      setCartEmpty(cartItems.length === 0);
       setLoading(false);
       setCartItems(list);
-      setCartEmpty(cartItems.length === 0);
     });
   }, [user, cartItems.length]);
 
@@ -152,7 +152,7 @@ export default function CartPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="bg-background-alpha backdrop-blur-sm rounded-xl p-6 shadow-lg sticky top-4">
+            <div className="bg-background rounded-xl p-6 shadow-lg sticky top-4">
               <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 
               <div className="space-y-2 mb-4">
@@ -171,9 +171,12 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button className="w-full bg-accent hover:bg-accent/90 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+              <a
+                href="/cart/checkout"
+                className="w-full inline-block text-center bg-accent hover:bg-accent/90 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+              >
                 Proceed to Checkout
-              </button>
+              </a>
             </div>
           </div>
         </div>
