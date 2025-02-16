@@ -31,7 +31,7 @@ export default function Checkout() {
       return;
     }
     async function fetchData() {
-      return axios.get(`http://localhost:8000/api/cart/${user?.id}`, {
+      return axios.get(`http://localhost:8000/api/cart`, {
         withCredentials: true,
       });
     }

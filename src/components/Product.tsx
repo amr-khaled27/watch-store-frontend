@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { BeatLoader } from "react-spinners";
+import { useCartContextCount } from "@/context/useCartCount";
 
 interface ProductProps {
   id: string;
@@ -20,6 +21,7 @@ const Product: React.FC<ProductProps> = ({
   imageUrl,
 }) => {
   const [awaitingResponse, setAwaitingResponse] = useState<boolean>(false);
+  const { increment } = useCartContextCount();
   const auth = useAuth();
 
   const handleAddToCart = async (id: string) => {
@@ -27,7 +29,6 @@ const Product: React.FC<ProductProps> = ({
       return;
     }
     setAwaitingResponse(true);
-    const user = auth.user;
     await axios.post(
       "http://localhost:8000/api/add-to-cart",
       {
@@ -58,7 +59,10 @@ const Product: React.FC<ProductProps> = ({
         <div className="flex justify-between items-center mt-4">
           <p className="text-accent font-bold">${price.toFixed(2)}</p>
           <button
-            onClick={() => handleAddToCart(id)}
+            onClick={() => {
+              handleAddToCart(id);
+              increment();
+            }}
             className="bg-accent text-background w-[120px] px-4 py-2 rounded-md"
           >
             {awaitingResponse ? (
