@@ -26,6 +26,7 @@ const Product: React.FC<ProductProps> = ({
 
   const handleAddToCart = async (id: string) => {
     if (!auth.isLoggedIn) {
+      toast.error("Please sign in to add products to cart");
       return;
     }
     setAwaitingResponse(true);

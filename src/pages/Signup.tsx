@@ -36,10 +36,14 @@ const Signup: React.FC = () => {
     }
 
     axios
-      .post("http://localhost:8000/api/auth/signup", {
-        username: data.username,
-        password: data.password,
-      })
+      .post(
+        "http://localhost:8000/api/auth/signup",
+        {
+          username: data.username,
+          password: data.password,
+        },
+        { withCredentials: true }
+      )
       .then((response) => {
         toast.success("Signup successful");
         console.log(response.data);
