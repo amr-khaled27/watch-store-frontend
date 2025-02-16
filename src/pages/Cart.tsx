@@ -26,7 +26,7 @@ export default function CartPage() {
       return;
     }
     async function fetchData() {
-      return axios.get(`http://localhost:8000/api/cart/${user?.id}`, {
+      return axios.get(`http://localhost:8000/api/cart`, {
         withCredentials: true,
       });
     }
@@ -43,9 +43,9 @@ export default function CartPage() {
   }, [user, cartItems.length]);
 
   const handleRemove = async (id: string) => {
-    console.log(`removing item with id: ${id}, user: ${user?.id}`);
+    console.log(`removing item with id: ${id}`);
     try {
-      await axios.delete(`http://localhost:8000/api/cart/${user?.id}/${id}`, {
+      await axios.delete(`http://localhost:8000/api/cart/${id}`, {
         withCredentials: true,
       });
       console.log("updating ui!");
@@ -63,7 +63,6 @@ export default function CartPage() {
       await axios.post(
         `http://localhost:8000/api/cart/increment`,
         {
-          userId: user?.id,
           productId: id,
         },
         { withCredentials: true }
@@ -90,7 +89,6 @@ export default function CartPage() {
       await axios.post(
         `http://localhost:8000/api/cart/decrement`,
         {
-          userId: user?.id,
           productId: id,
         },
         { withCredentials: true }

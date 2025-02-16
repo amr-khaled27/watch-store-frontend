@@ -4,6 +4,7 @@ import { CartItem } from "@/pages/Cart";
 import { useAuth } from "@/context/useAuth";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { PuffLoader } from "react-spinners";
 
 type userData = {
   firstname: string;
@@ -89,10 +90,6 @@ export default function Checkout() {
     setStep("payment");
   };
 
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
-
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -102,7 +99,7 @@ export default function Checkout() {
   const total = subtotal + shipping + tax;
 
   return (
-    <div className="min-h-screen bg-background text-text">
+    <div className="min-h-screen animate-fade-in bg-background text-text">
       <ToastContainer />
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center gap-2 mb-8">
@@ -288,17 +285,6 @@ export default function Checkout() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="saveCard"
-                      className="rounded border-primary/20"
-                    />
-                    <label htmlFor="saveCard" className="text-sm">
-                      Save card for future purchases
-                    </label>
-                  </div>
-
                   <button className="w-full bg-accent hover:bg-accent/90 text-white font-medium py-3 px-4 rounded-lg transition-colors">
                     Place Order
                   </button>
@@ -315,44 +301,55 @@ export default function Checkout() {
               </div>
 
               <div className="space-y-4 mb-4">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3">
-                    <img
-                      src={`http://localhost:8000/${item.image_url}`}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-medium">{item.name}</h3>
-                      <p className="text-sm text-primary">
-                        Qty: {item.quantity}
-                      </p>
-                    </div>
-                    <span className="font-medium">
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </span>
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <PuffLoader size={75} color="#cacaca" />
                   </div>
-                ))}
-              </div>
-
-              <div className="space-y-2 mb-4">
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span className="font-medium">${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span className="font-medium">${shipping.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Tax</span>
-                  <span className="font-medium">${tax.toFixed(2)}</span>
-                </div>
-                <div className="h-px bg-primary/20 my-2"></div>
-                <div className="flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
+                ) : (
+                  <>
+                    {cartItems.map((item) => (
+                      <div key={item.id} className="flex items-center gap-3">
+                        <img
+                          src={`http://localhost:8000/${item.image_url}`}
+                          alt={item.name}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-medium">{item.name}</h3>
+                          <p className="text-sm text-primary">
+                            Qty: {item.quantity}
+                          </p>
+                        </div>
+                        <span className="font-medium">
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between">
+                        <span>Subtotal</span>
+                        <span className="font-medium">
+                          ${subtotal.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Shipping</span>
+                        <span className="font-medium">
+                          ${shipping.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Tax</span>
+                        <span className="font-medium">${tax.toFixed(2)}</span>
+                      </div>
+                      <div className="h-px bg-primary/20 my-2"></div>
+                      <div className="flex justify-between text-lg font-bold">
+                        <span>Total</span>
+                        <span>${total.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="text-sm text-primary flex items-center gap-1">

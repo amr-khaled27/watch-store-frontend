@@ -21,11 +21,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log(
         "Checking user authentication using authcontect component..."
       );
-      const response = await axios.get("http://localhost:8000/api/check-auth", {
+      const response = await axios.get("http://localhost:8000/api/fetch/user", {
         withCredentials: true,
       });
-      setIsLoggedIn(response.data.loggedIn);
-      setUser(response.data.user);
+      setIsLoggedIn(true);
+      setUser(response.data);
       setLoading(false);
     } catch (error) {
       console.error("Error checking user authentication:", error);

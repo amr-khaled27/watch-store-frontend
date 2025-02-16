@@ -28,16 +28,10 @@ const Product: React.FC<ProductProps> = ({
     }
     setAwaitingResponse(true);
     const user = auth.user;
-    console.log(user);
-    console.log(
-      `Adding product with id ${id} to the cart of the user who's id is ${user.id}`
-    );
-
-    const response = await axios.post(
+    await axios.post(
       "http://localhost:8000/api/add-to-cart",
       {
         productId: id,
-        userId: user.id,
       },
       { withCredentials: true }
     );
