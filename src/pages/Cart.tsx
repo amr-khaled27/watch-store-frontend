@@ -3,6 +3,7 @@ import axios from "axios";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import CartItem from "@/components/CartItem";
+import { PuffLoader } from "react-spinners";
 
 interface CartItem {
   id: string;
@@ -14,6 +15,8 @@ interface CartItem {
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [cartEmpty, setCartEmpty] = useState<boolean>(false);
 
   const auth = useAuth();
   const user = auth.user;
@@ -33,9 +36,11 @@ export default function CartPage() {
         item.product.quantity = item.quantity;
         list.push(item.product);
       });
+      setLoading(false);
       setCartItems(list);
+      setCartEmpty(cartItems.length === 0);
     });
-  }, [user]);
+  }, [user, cartItems.length]);
 
   const handleRemove = async (id: string) => {
     console.log(`removing item with id: ${id}, user: ${user?.id}`);
@@ -118,15 +123,31 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="bg-background-alpha backdrop-blur-sm rounded-xl p-6 shadow-lg">
-              {cartItems.map((item) => (
-                <CartItem
-                  key={item.id}
-                  item={item}
-                  onIncrease={() => handleIncrement(item.id)}
-                  onDecrease={() => handleDecrement(item.id)}
-                  onRemove={() => handleRemove(item.id)}
-                />
-              ))}
+              {loading ? (
+                <div className="flex justify-center items-center h-full">
+                  <PuffLoader size={150} color="#cacaca" />
+                </div>
+              ) : cartEmpty ? (
+                <div className="text-center py-16 space-y-4">
+                  <p className="text-xl font-medium">Your cart is empty</p>
+                  <a
+                    href="/"
+                    className="inline-block hover:bg-accent p-2 duration-300"
+                  >
+                    Continue Shopping?
+                  </a>
+                </div>
+              ) : (
+                cartItems.map((item) => (
+                  <CartItem
+                    key={item.id}
+                    item={item}
+                    onIncrease={() => handleIncrement(item.id)}
+                    onDecrease={() => handleDecrement(item.id)}
+                    onRemove={() => handleRemove(item.id)}
+                  />
+                ))
+              )}
             </div>
           </div>
 
