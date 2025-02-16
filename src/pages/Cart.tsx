@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/useAuth";
 import axios from "axios";
-import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import CartItem from "@/components/CartItem";
 
@@ -13,9 +13,10 @@ interface CartItem {
 }
 
 export default function CartPage() {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
   const auth = useAuth();
   const user = auth.user;
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -36,12 +37,75 @@ export default function CartPage() {
     });
   }, [user]);
 
+  const handleRemove = async (id: string) => {
+    console.log(`removing item with id: ${id}, user: ${user?.id}`);
+    try {
+      await axios.delete(`http://localhost:8000/api/cart/${user?.id}/${id}`, {
+        withCredentials: true,
+      });
+      console.log("updating ui!");
+      setCartItems((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleIncrement = async (id: string) => {
+    console.log(
+      `increasing quantity of item with id: ${id}, for user with id: ${user?.id}`
+    );
+    try {
+      await axios.post(
+        `http://localhost:8000/api/cart/increment`,
+        {
+          userId: user?.id,
+          productId: id,
+        },
+        { withCredentials: true }
+      );
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDecrement = async (id: string) => {
+    console.log(
+      `decreasing quantity of item with id: ${id}, for user with id: ${user?.id}`
+    );
+    if (cartItems.some((item) => item.id === id && item.quantity === 1)) {
+      console.log("use the delete button");
+      return;
+    }
+    try {
+      await axios.post(
+        `http://localhost:8000/api/cart/decrement`,
+        {
+          userId: user?.id,
+          productId: id,
+        },
+        { withCredentials: true }
+      );
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const shipping = 15.99;
-  const total = subtotal + shipping;
+  const shipping = subtotal === 0 ? 0 : 15.99;
+  const total = subtotal === 0 ? 0 : subtotal + shipping;
 
   return (
     <div className="min-h-screen animate-fade-in bg-background text-text">
@@ -58,9 +122,9 @@ export default function CartPage() {
                 <CartItem
                   key={item.id}
                   item={item}
-                  onIncrease={() => console.log(`Increase: ${item.name}`)}
-                  onDecrease={() => console.log(`Decrease: ${item.name}`)}
-                  onRemove={() => console.log(`Remove ${item.name}`)}
+                  onIncrease={() => handleIncrement(item.id)}
+                  onDecrease={() => handleDecrement(item.id)}
+                  onRemove={() => handleRemove(item.id)}
                 />
               ))}
             </div>
