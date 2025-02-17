@@ -24,8 +24,8 @@ export default function CartPage() {
   const user = auth.user;
 
   useEffect(() => {
-    if (!user) {
-      return;
+    if (!auth.isLoggedIn) {
+      window.location.href = "/";
     }
     async function fetchData() {
       return axios.get(`http://localhost:8000/api/cart`, {
@@ -42,7 +42,7 @@ export default function CartPage() {
       setLoading(false);
       setCartItems(list);
     });
-  }, [user, cartItems.length]);
+  }, [auth.isLoggedIn, cartItems.length]);
 
   const handleRemove = async (id: string) => {
     console.log(`removing item with id: ${id}`);

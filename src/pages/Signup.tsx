@@ -3,8 +3,13 @@ import { Button } from "../components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { useAuth } from "@/context/useAuth";
 
 const Signup: React.FC = () => {
+  const auth = useAuth();
+  if (auth.isLoggedIn) {
+    window.location.href = "/";
+  }
   const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);

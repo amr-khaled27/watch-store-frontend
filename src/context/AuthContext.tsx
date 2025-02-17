@@ -21,9 +21,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log(
         "Checking user authentication using authcontect component..."
       );
-      const response = await axios.get("http://localhost:8000/api/fetch/user", {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/fetch/user`,
+        {
+          withCredentials: true,
+        }
+      );
       setIsLoggedIn(true);
       setUser(response.data);
       setLoading(false);
@@ -39,7 +42,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, checkAuth, loading, user }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, checkAuth, loading, user, setUser, setIsLoggedIn }}
+    >
       {children}
     </AuthContext.Provider>
   );

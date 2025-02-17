@@ -18,10 +18,10 @@ export const CartContextCountProvider = ({
   const [count, setCount] = useState(0);
 
   const fetchData = async () => {
-    const response = await axios.get(`http://localhost:8000/api/cart`, {
+    const response = await axios.get(`http://localhost:8000/api/cart/count`, {
       withCredentials: true,
     });
-    return response.data.length;
+    return response.data.count;
   };
 
   useEffect(() => {
