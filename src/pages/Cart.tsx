@@ -4,6 +4,8 @@ import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import CartItem from "@/components/CartItem";
 import { PuffLoader } from "react-spinners";
+import { Lock } from "lucide-react";
+import { loadStripe } from "@stripe/stripe-js";
 
 export interface CartItem {
   id: string;
@@ -103,6 +105,30 @@ export default function CartPage() {
     }
   };
 
+  const makePayment = async () => {
+    try {
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
+      const response = await axios.post(
+        "http://localhost:8000/api/checkout",
+        {
+          cartItems: cartItems,
+        },
+        { withCredentials: true }
+      );
+
+      await axios.delete("http://localhost:8000/api/cart", {
+        withCredentials: true,
+      });
+
+      await stripe.redirectToCheckout({
+        sessionId: response.data.sessionId,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -136,15 +162,36 @@ export default function CartPage() {
                   </a>
                 </div>
               ) : (
-                cartItems.map((item) => (
-                  <CartItem
-                    key={item.id}
-                    item={item}
-                    onIncrease={() => handleIncrement(item.id)}
-                    onDecrease={() => handleDecrement(item.id)}
-                    onRemove={() => handleRemove(item.id)}
-                  />
-                ))
+                <>
+                  <div>
+                    {cartItems.map((item) => (
+                      <CartItem
+                        key={item.id}
+                        item={item}
+                        onIncrease={() => handleIncrement(item.id)}
+                        onDecrease={() => handleDecrement(item.id)}
+                        onRemove={() => handleRemove(item.id)}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={async () => {
+                      try {
+                        await axios.delete("http://localhost:8000/api/cart", {
+                          withCredentials: true,
+                        });
+                        setCartItems([]);
+                        setCartEmpty(true);
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    }}
+                    className="mt-2 inline-block text-center bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                  >
+                    Clear Cart
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -169,12 +216,19 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <a
-                href="/cart/checkout"
-                className="w-full inline-block text-center bg-accent hover:bg-accent/90 text-white font-medium py-3 px-4 rounded-lg transition-colors"
-              >
-                Proceed to Checkout
-              </a>
+              <div>
+                <button
+                  onClick={makePayment}
+                  className="w-full inline-block text-center bg-accent hover:bg-accent/90 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                >
+                  Pay {total === 0 ? "" : `$${total.toFixed(2)}`}
+                </button>
+
+                <div className="text-sm mt-2 text-gray-400 flex items-center justify-center gap-1">
+                  <Lock className="w-4 h-4" />
+                  <span>Secure checkout powered by Stripe</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import axios from "axios";
 
 const Logout: React.FC = () => {
   const handleLogout = async () => {
+    console.log("logging out");
     const response = await axios.post(
       "http://localhost:8000/api/logout",
       {},

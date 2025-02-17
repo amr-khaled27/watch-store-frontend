@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ThemeToggle } from "./theme-toggle";
 import { useAuth } from "@/context/useAuth";
 import Logout from "./Logout";

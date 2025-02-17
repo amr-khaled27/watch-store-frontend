@@ -6,7 +6,8 @@ import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
+import PaymentSuccessPage from "./pages/Success";
+import PaymentCancelPage from "./pages/Cancel";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
 import { CartContextCountProvider } from "./context/CartContextCount";
@@ -25,7 +26,8 @@ const App = () => (
               <Route path="/auth/signin" element={<Signin />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/cart/checkout" element={<Checkout />} />
+              <Route path="/success" element={<PaymentSuccessPage />} />
+              <Route path="/cancel" element={<PaymentCancelPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
