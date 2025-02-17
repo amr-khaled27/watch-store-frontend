@@ -39,7 +39,7 @@ export default function LoginPage() {
 
     axios
       .post(
-        "http://localhost:8000/api/auth/login",
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         {
           username: data.username,
           password: data.password,
