@@ -1,16 +1,20 @@
 import React from "react";
-import { Button } from "../components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ToastContainer, toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { UserPlus, Lock } from "lucide-react";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "@/context/useAuth";
 
-const Signup: React.FC = () => {
+export default function Signup() {
   const auth = useAuth();
+  const navigate = useNavigate();
+
   if (auth.isLoggedIn) {
-    window.location.href = "/";
+    navigate("/");
+    return null;
   }
-  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {
@@ -18,7 +22,6 @@ const Signup: React.FC = () => {
       password: formData.get("password"),
       confirmPassword: formData.get("confirmPassword"),
     };
-    console.log(data);
 
     if (!data.username || !data.password || !data.confirmPassword) {
       toast.error("All fields are required");
@@ -51,9 +54,9 @@ const Signup: React.FC = () => {
       )
       .then((response) => {
         toast.success("Signup successful");
-        console.log(response.data);
-
-        window.location.href = "/";
+        auth.setUser(response.data);
+        auth.setIsLoggedIn(true);
+        navigate("/");
       })
       .catch((error) => {
         toast.error("Signup failed");
@@ -62,57 +65,92 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center"
-      style={{ background: "var(--background)" }}
-    >
-      <ToastContainer icon={false} />
-      <div className="bg-accent p-8 sm:rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-white text-2xl font-bold mb-6">Sign Up</h2>
-        <form onSubmit={handleSignup}>
-          <div className="mb-4">
-            <label className="text-white block text-sm font-medium mb-2">
-              Username
-            </label>
-            <Input
-              name="username"
-              type="username"
-              placeholder="Enter your username"
-              className="w-full px-3 py-2 text-white border rounded bg-accent hover:bg-purple-800 active:bg-purple-800 duration-300"
-            />
+    <div className="min-h-screen animate-fade-in bg-background text-text flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <div className="mx-auto h-12 w-12 relative">
+            <div className="absolute inset-0 bg-accent/20 rounded-xl rotate-6"></div>
+            <div className="absolute inset-0 bg-accent rounded-xl flex items-center justify-center">
+              <UserPlus className="h-6 w-6 text-white" />
+            </div>
           </div>
-          <div className="mb-4">
-            <label className="text-white block text-sm font-medium mb-2">
-              Password
-            </label>
-            <Input
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              className="w-full px-3 py-2 text-white border rounded bg-accent hover:bg-purple-800 active:bg-purple-800 duration-300"
-            />
+          <h2 className="mt-6 text-3xl font-bold">Create your account</h2>
+          <p className="mt-2 text-primary">Join us and start shopping</p>
+        </div>
+
+        <div className="bg-background-alpha backdrop-blur-sm rounded-xl p-8 shadow-lg">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-primary"
+              >
+                Username
+              </label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                className="mt-1 block w-full px-3 py-2 bg-background border border-primary/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                placeholder="Enter your username"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-primary"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                className="mt-1 block w-full px-3 py-2 bg-background border border-primary/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                placeholder="Enter your password"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-primary"
+              >
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                className="mt-1 block w-full px-3 py-2 bg-background border border-primary/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                placeholder="Confirm your password"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+            >
+              <Lock className="h-5 w-5" />
+              Create Account
+            </button>
+          </form>
+
+          <div className="mt-6 text-center text-sm">
+            <span className="text-primary">Already have an account?</span>{" "}
+            <Link
+              to="/login"
+              className="text-accent hover:text-accent/90 font-medium"
+            >
+              Sign in
+            </Link>
           </div>
-          <div className="mb-4">
-            <label className="text-white block text-sm font-medium mb-2">
-              Confirm Password
-            </label>
-            <Input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm your password"
-              className="w-full px-3 py-2 text-white border rounded bg-accent hover:bg-purple-800 active:bg-purple-800 duration-300"
-            />
-          </div>
-          <Button
-            type="submit"
-            className="w-full py-2 mt-4 bg-accent text-white bg-purple-700 hover:bg-purple-800 duration-300"
-          >
-            Sign Up
-          </Button>
-        </form>
+        </div>
       </div>
     </div>
   );
-};
-
-export default Signup;
+}

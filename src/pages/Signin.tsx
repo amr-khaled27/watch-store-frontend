@@ -61,7 +61,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-text flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen animate-fade-in bg-background text-text flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 relative">
@@ -122,7 +122,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center text-sm">
             <span className="text-primary">Don't have an account?</span>{" "}
             <Link
-              to="/signup"
+              to="/auth/signup"
               className="text-accent hover:text-accent/90 font-medium"
             >
               Create one

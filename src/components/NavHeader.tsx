@@ -4,10 +4,12 @@ import { useAuth } from "@/context/useAuth";
 import Logout from "./Logout";
 import CartButton from "./CartButton";
 import { useCartContextCount } from "@/context/useCartCount";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavHeader: React.FC = () => {
   const { isLoggedIn, loading } = useAuth();
   const { count } = useCartContextCount();
+  const navigate = useNavigate();
 
   return (
     <header className="animate-fade-in font-inter flex justify-between items-center shadow-lg sticky top-0 p-4 bg-background z-50">
@@ -21,12 +23,12 @@ const NavHeader: React.FC = () => {
             </div>
           ) : (
             <>
-              <a className="p-1" href="/auth/signin">
+              <Link className="p-1" to="/auth/signin">
                 Sign In
-              </a>
-              <a className="p-1" href="/auth/signup">
+              </Link>
+              <Link className="p-1" to="/auth/signup">
                 Sign Up
-              </a>
+              </Link>
             </>
           ))}
         <ThemeToggle />
