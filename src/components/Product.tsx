@@ -62,7 +62,9 @@ const Product: React.FC<ProductProps> = ({
           <button
             onClick={() => {
               handleAddToCart(id);
-              increment();
+              if (auth.isLoggedIn) {
+                increment();
+              }
             }}
             className="bg-accent text-background w-[120px] px-4 py-2 rounded-md"
           >

@@ -6,12 +6,6 @@ interface CartContextCountProps {
   children: ReactNode;
 }
 
-interface CartContextCountType {
-  count: number;
-  increment: () => void;
-  decrement: () => void;
-}
-
 export const CartContextCountProvider = ({
   children,
 }: CartContextCountProps) => {
