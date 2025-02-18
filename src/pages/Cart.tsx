@@ -30,7 +30,7 @@ export default function CartPage() {
   const auth = useAuth();
   const user = auth.user;
 
-  const { setCount } = useCartContextCount();
+  const { count, setCount, increment, decrement } = useCartContextCount();
 
   useEffect(() => {
     async function fetchData() {
@@ -56,12 +56,14 @@ export default function CartPage() {
 
   const handleRemove = async (id: string) => {
     console.log(`removing item with id: ${id}`);
+    const itemCount = cartItems.find((item) => item.id === id).quantity;
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/${id}`, {
         withCredentials: true,
       });
       console.log("updating ui!");
       setCartItems((prev) => prev.filter((item) => item.id !== id));
+      setCount(count - itemCount);
     } catch (error) {
       console.log(error);
     }
@@ -84,6 +86,7 @@ export default function CartPage() {
           item.id === id ? { ...item, quantity: item.quantity + 1 } : item
         )
       );
+      increment();
     } catch (error) {
       console.error(error);
     }
@@ -110,6 +113,7 @@ export default function CartPage() {
           item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
       );
+      decrement();
     } catch (error) {
       console.error(error);
     }
@@ -122,16 +126,18 @@ export default function CartPage() {
         const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
         const response = await axios.post(
-          "${import.meta.env.VITE_API_URL}/api/checkout",
+          `${import.meta.env.VITE_API_URL}/api/checkout`,
           {
             cartItems: cartItems,
           },
           { withCredentials: true }
         );
 
-        await axios.delete("${import.meta.env.VITE_API_URL}/api/cart", {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart`, {
           withCredentials: true,
         });
+
+        setCount(0);
 
         await stripe.redirectToCheckout({
           sessionId: response.data.sessionId,
@@ -196,7 +202,7 @@ export default function CartPage() {
                     onClick={async () => {
                       try {
                         await axios.delete(
-                          "${import.meta.env.VITE_API_URL}/api/cart",
+                          `${import.meta.env.VITE_API_URL}/api/cart`,
                           {
                             withCredentials: true,
                           }

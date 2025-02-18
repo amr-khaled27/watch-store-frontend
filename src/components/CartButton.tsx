@@ -2,16 +2,18 @@ import React from "react";
 import { Button } from "./ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 interface CartButtonProps {
   itemCount: number;
 }
 
 const CartButton: React.FC<CartButtonProps> = ({ itemCount }) => {
+  const navigate = useNavigate();
   return (
     <Button
       onClick={() => {
-        window.location.href = "/cart";
+        navigate("/cart");
       }}
       variant="ghost"
       className="relative hover:bg-gray-600 w-10 h-10 hover:bg-gray-600/20"

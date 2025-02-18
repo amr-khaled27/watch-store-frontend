@@ -22,10 +22,16 @@ const NavHeader: React.FC = () => {
             </div>
           ) : (
             <>
-              <Link className="p-1" to="/auth/signin">
+              <Link
+                className="py-2 px-3 rounded-md hover:bg-gray-600/20 duration-150"
+                to="/auth/signin"
+              >
                 Sign In
               </Link>
-              <Link className="p-1" to="/auth/signup">
+              <Link
+                className="py-2 px-3 rounded-md hover:bg-gray-600/20 duration-150"
+                to="/auth/signup"
+              >
                 Sign Up
               </Link>
             </>
