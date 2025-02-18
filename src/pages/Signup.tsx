@@ -47,7 +47,7 @@ export default function Signup() {
 
     axios
       .post(
-        "http://localhost:8000/api/auth/signup",
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
         {
           username: data.username,
           password: data.password,

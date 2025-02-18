@@ -34,7 +34,7 @@ export default function CartPage() {
 
   useEffect(() => {
     async function fetchData() {
-      return axios.get(`http://localhost:8000/api/cart`, {
+      return axios.get(`${import.meta.env.VITE_API_URL}/api/cart`, {
         withCredentials: true,
       });
     }
@@ -57,7 +57,7 @@ export default function CartPage() {
   const handleRemove = async (id: string) => {
     console.log(`removing item with id: ${id}`);
     try {
-      await axios.delete(`http://localhost:8000/api/cart/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/${id}`, {
         withCredentials: true,
       });
       console.log("updating ui!");
@@ -73,7 +73,7 @@ export default function CartPage() {
     );
     try {
       await axios.post(
-        `http://localhost:8000/api/cart/increment`,
+        `${import.meta.env.VITE_API_URL}/api/cart/increment`,
         {
           productId: id,
         },
@@ -99,7 +99,7 @@ export default function CartPage() {
     }
     try {
       await axios.post(
-        `http://localhost:8000/api/cart/decrement`,
+        `${import.meta.env.VITE_API_URL}/api/cart/decrement`,
         {
           productId: id,
         },
@@ -122,14 +122,14 @@ export default function CartPage() {
         const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
         const response = await axios.post(
-          "http://localhost:8000/api/checkout",
+          "${import.meta.env.VITE_API_URL}/api/checkout",
           {
             cartItems: cartItems,
           },
           { withCredentials: true }
         );
 
-        await axios.delete("http://localhost:8000/api/cart", {
+        await axios.delete("${import.meta.env.VITE_API_URL}/api/cart", {
           withCredentials: true,
         });
 
@@ -195,9 +195,12 @@ export default function CartPage() {
                   <button
                     onClick={async () => {
                       try {
-                        await axios.delete("http://localhost:8000/api/cart", {
-                          withCredentials: true,
-                        });
+                        await axios.delete(
+                          "${import.meta.env.VITE_API_URL}/api/cart",
+                          {
+                            withCredentials: true,
+                          }
+                        );
                         setCartItems([]);
                         setCartEmpty(true);
                         setCount(0);

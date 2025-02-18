@@ -22,7 +22,7 @@ const Index = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/fetch/products",
+          `${import.meta.env.VITE_API_URL}/api/fetch/products`,
           {
             headers: {
               Authorization: `Bearer 75e8cd5b-c49a-47e0-9bde-9f9b8ee15ec2`,

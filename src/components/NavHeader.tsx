@@ -9,7 +9,6 @@ import { Link, useNavigate } from "react-router-dom";
 const NavHeader: React.FC = () => {
   const { isLoggedIn, loading } = useAuth();
   const { count } = useCartContextCount();
-  const navigate = useNavigate();
 
   return (
     <header className="animate-fade-in font-inter flex justify-between items-center shadow-lg sticky top-0 p-4 bg-background z-50">

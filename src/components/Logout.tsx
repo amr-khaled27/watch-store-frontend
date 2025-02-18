@@ -8,7 +8,7 @@ const Logout: React.FC = () => {
   const handleLogout = async () => {
     console.log("logging out");
     const response = await axios.post(
-      "http://localhost:8000/api/logout",
+      `${import.meta.env.VITE_API_URL}/api/logout`,
       {},
       { withCredentials: true }
     );

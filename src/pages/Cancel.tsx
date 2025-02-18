@@ -1,6 +1,9 @@
 import { AlertCircle, ArrowLeft, ShoppingCart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function PaymentCancelPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background text-text">
       <div className="max-w-2xl mx-auto px-4 py-16">
@@ -43,7 +46,7 @@ export default function PaymentCancelPage() {
               Return to Cart
             </button>
             <button
-              onClick={() => (window.location.href = "/")}
+              onClick={() => navigate("/")}
               className="flex-1 border border-primary/20 hover:bg-primary/5 font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
             >
               <ArrowLeft className="w-5 h-5" />
