@@ -17,8 +17,6 @@ const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    console.log("Index page mounted");
-
     const fetchProducts = async () => {
       try {
         const response = await axios.get(

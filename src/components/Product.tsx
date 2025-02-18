@@ -48,6 +48,7 @@ const Product: React.FC<ProductProps> = ({
       className="bg-background shadow-xl rounded-xl outline outline-1 outline-transparent hover:outline-text transition-[outline] duration-300 overflow-hidden"
     >
       <img
+        crossOrigin="anonymous"
         src={`${import.meta.env.VITE_API_URL}/${imageUrl}`}
         alt={name}
         className="w-full h-48 object-cover"

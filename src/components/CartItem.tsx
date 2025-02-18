@@ -26,6 +26,7 @@ const CartListItem: React.FC<CartItemProps> = ({
       className="flex items-center gap-4 py-4 border-b border-primary/20 last:border-0"
     >
       <img
+        crossOrigin="anonymous"
         src={`http://localhost:8000/${item.image_url}`}
         alt={item.name}
         className="w-24 h-24 object-cover rounded-lg"
