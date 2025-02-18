@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import { useCartContextCount } from "@/context/useCartCount";
 
 export interface CartItem {
   id: string;
@@ -28,6 +29,8 @@ export default function CartPage() {
 
   const auth = useAuth();
   const user = auth.user;
+
+  const { setCount } = useCartContextCount();
 
   useEffect(() => {
     async function fetchData() {
@@ -197,6 +200,7 @@ export default function CartPage() {
                         });
                         setCartItems([]);
                         setCartEmpty(true);
+                        setCount(0);
                       } catch (error) {
                         console.error(error);
                       }
