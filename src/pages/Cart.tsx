@@ -6,6 +6,10 @@ import CartItem from "@/components/CartItem";
 import { PuffLoader } from "react-spinners";
 import { Lock } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
 export interface CartItem {
   id: string;
@@ -20,29 +24,32 @@ export default function CartPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [cartEmpty, setCartEmpty] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   const auth = useAuth();
   const user = auth.user;
 
   useEffect(() => {
-    if (!auth.isLoggedIn) {
-      window.location.href = "/";
-    }
     async function fetchData() {
       return axios.get(`http://localhost:8000/api/cart`, {
         withCredentials: true,
       });
     }
-    fetchData().then((response) => {
-      const list: CartItem[] = [];
-      response.data.map((item) => {
-        item.product.quantity = item.quantity;
-        list.push(item.product);
+    fetchData()
+      .then((response) => {
+        const list: CartItem[] = [];
+        response.data.map((item) => {
+          item.product.quantity = item.quantity;
+          list.push(item.product);
+        });
+        setCartEmpty(cartItems.length === 0);
+        setLoading(false);
+        setCartItems(list);
+      })
+      .catch(() => {
+        navigate("/auth/signin");
       });
-      setCartEmpty(cartItems.length === 0);
-      setLoading(false);
-      setCartItems(list);
-    });
-  }, [auth.isLoggedIn, cartItems.length]);
+  }, [auth.isLoggedIn, cartItems.length, navigate]);
 
   const handleRemove = async (id: string) => {
     console.log(`removing item with id: ${id}`);
@@ -106,26 +113,29 @@ export default function CartPage() {
   };
 
   const makePayment = async () => {
-    try {
-      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+    if (total === 0) navigate("/");
+    else {
+      try {
+        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-      const response = await axios.post(
-        "http://localhost:8000/api/checkout",
-        {
-          cartItems: cartItems,
-        },
-        { withCredentials: true }
-      );
+        const response = await axios.post(
+          "http://localhost:8000/api/checkout",
+          {
+            cartItems: cartItems,
+          },
+          { withCredentials: true }
+        );
 
-      await axios.delete("http://localhost:8000/api/cart", {
-        withCredentials: true,
-      });
+        await axios.delete("http://localhost:8000/api/cart", {
+          withCredentials: true,
+        });
 
-      await stripe.redirectToCheckout({
-        sessionId: response.data.sessionId,
-      });
-    } catch (error) {
-      console.error(error);
+        await stripe.redirectToCheckout({
+          sessionId: response.data.sessionId,
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -139,9 +149,19 @@ export default function CartPage() {
   return (
     <div className="min-h-screen animate-fade-in bg-background text-text">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex items-center gap-2 mb-8">
-          <ShoppingCart className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold">Your Cart</h1>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-2">
+            <ShoppingCart className="w-8 h-8 text-primary" />
+            <h1 className="text-3xl font-bold">Your Cart</h1>
+          </div>
+
+          <Button
+            onClick={() => navigate("/")}
+            variant="ghost"
+            className="w-10 h-10 hover:bg-gray-600/50"
+          >
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -154,12 +174,6 @@ export default function CartPage() {
               ) : cartEmpty ? (
                 <div className="text-center py-16 space-y-4">
                   <p className="text-xl font-medium">Your cart is empty</p>
-                  <a
-                    href="/"
-                    className="inline-block hover:bg-accent p-2 duration-300"
-                  >
-                    Continue Shopping?
-                  </a>
                 </div>
               ) : (
                 <>
@@ -198,22 +212,32 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="bg-background rounded-xl p-6 shadow-lg sticky top-4">
-              <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+              {total > 0 && (
+                <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+              )}
 
               <div className="space-y-2 mb-4">
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span className="font-medium">${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span className="font-medium">${shipping.toFixed(2)}</span>
-                </div>
-                <div className="h-px bg-primary/20 my-2"></div>
-                <div className="flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
+                {total > 0 && (
+                  <>
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span className="font-medium">
+                        ${subtotal.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Shipping</span>
+                      <span className="font-medium">
+                        ${shipping.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="h-px bg-primary/20 my-2"></div>
+                    <div className="flex justify-between text-lg font-bold">
+                      <span>Total</span>
+                      <span>${total.toFixed(2)}</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div>
@@ -221,13 +245,19 @@ export default function CartPage() {
                   onClick={makePayment}
                   className="w-full inline-block text-center bg-accent hover:bg-accent/90 text-white font-medium py-3 px-4 rounded-lg transition-colors"
                 >
-                  Pay {total === 0 ? "" : `$${total.toFixed(2)}`}
+                  {total === 0 ? (
+                    "Continue Shopping"
+                  ) : (
+                    <span>Pay ${total.toFixed(2)}</span>
+                  )}
                 </button>
 
-                <div className="text-sm mt-2 text-gray-400 flex items-center justify-center gap-1">
-                  <Lock className="w-4 h-4" />
-                  <span>Secure checkout powered by Stripe</span>
-                </div>
+                {total > 0 && (
+                  <div className="text-sm mt-2 text-gray-400 flex items-center justify-center gap-1">
+                    <Lock className="w-4 h-4" />
+                    <span>Secure checkout powered by Stripe</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

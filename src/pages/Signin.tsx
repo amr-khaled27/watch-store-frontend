@@ -4,6 +4,7 @@ import { LogIn, Lock } from "lucide-react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "@/context/useAuth";
+import { showToast } from "@/utils/toast";
 
 export default function LoginPage() {
   const auth = useAuth();
@@ -23,17 +24,17 @@ export default function LoginPage() {
     };
 
     if (!data.username || !data.password) {
-      toast.error("All fields are required");
+      showToast.error("All fields are required");
       return;
     }
 
     if ((data.username as string).length < 3) {
-      toast.error("Username must be at least 3 characters long");
+      showToast.error("Username must be at least 3 characters long");
       return;
     }
 
     if ((data.password as string).length < 6) {
-      toast.error("Password must be at least 6 characters long");
+      showToast.error("Password must be at least 6 characters long");
       return;
     }
 
@@ -49,13 +50,13 @@ export default function LoginPage() {
         }
       )
       .then((response) => {
-        toast.success("Login successful");
+        showToast.success("Login successful");
         auth.setUser(response.data);
         auth.setIsLoggedIn(true);
         navigate("/");
       })
       .catch((error) => {
-        toast.error("Login failed");
+        showToast.error("Invalid credentials");
         console.error(error);
       });
   };

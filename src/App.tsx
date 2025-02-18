@@ -10,6 +10,7 @@ import PaymentCancelPage from "./pages/Cancel";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
 import { CartContextCountProvider } from "./context/CartContextCount";
+import { ToastContainer } from "react-toastify";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
       <AuthProvider>
         <CartContextCountProvider>
           <BrowserRouter>
+            <ToastContainer />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth/signup" element={<Signup />} />

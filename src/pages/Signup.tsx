@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserPlus, Lock } from "lucide-react";
-import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "@/context/useAuth";
+import { showToast } from "../utils/toast";
 
 export default function Signup() {
   const auth = useAuth();
@@ -24,22 +24,22 @@ export default function Signup() {
     };
 
     if (!data.username || !data.password || !data.confirmPassword) {
-      toast.error("All fields are required");
+      showToast.error("All fields are required");
       return;
     }
 
     if ((data.username as string).length < 3) {
-      toast.error("Username must be at least 3 characters long");
-      return;
-    }
-
-    if (data.password !== data.confirmPassword) {
-      toast.error("Passwords do not match");
+      showToast.error("Username must be at least 3 characters long");
       return;
     }
 
     if ((data.password as string).length < 6) {
-      toast.error("Password must be at least 6 characters long");
+      showToast.error("Password must be at least 6 characters long");
+      return;
+    }
+
+    if (data.password !== data.confirmPassword) {
+      showToast.error("Passwords do not match");
       return;
     }
 
@@ -53,13 +53,13 @@ export default function Signup() {
         { withCredentials: true }
       )
       .then((response) => {
-        toast.success("Signup successful");
+        showToast.success("Signup successful");
         auth.setUser(response.data);
         auth.setIsLoggedIn(true);
         navigate("/");
       })
       .catch((error) => {
-        toast.error("Signup failed");
+        showToast.error("Signup failed");
         console.error(error);
       });
   };
@@ -143,7 +143,7 @@ export default function Signup() {
           <div className="mt-6 text-center text-sm">
             <span className="text-primary">Already have an account?</span>{" "}
             <Link
-              to="/login"
+              to="/auth/signin"
               className="text-accent hover:text-accent/90 font-medium"
             >
               Sign in

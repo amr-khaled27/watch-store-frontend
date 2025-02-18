@@ -1,9 +1,9 @@
 import { useAuth } from "@/context/useAuth";
 import axios from "axios";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 import { BeatLoader } from "react-spinners";
 import { useCartContextCount } from "@/context/useCartCount";
+import { showToast } from "@/utils/toast";
 
 interface ProductProps {
   id: string;
@@ -26,7 +26,7 @@ const Product: React.FC<ProductProps> = ({
 
   const handleAddToCart = async (id: string) => {
     if (!auth.isLoggedIn) {
-      toast.error("Please sign in to add products to cart");
+      showToast.error("Please sign in to add products to cart");
       return;
     }
     setAwaitingResponse(true);
@@ -40,7 +40,7 @@ const Product: React.FC<ProductProps> = ({
 
     setAwaitingResponse(false);
 
-    toast.success("Product added to cart successfully!");
+    showToast.success("Product added to cart");
   };
   return (
     <div

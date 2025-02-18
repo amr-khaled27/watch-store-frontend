@@ -27,6 +27,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           withCredentials: true,
         }
       );
+      console.log("User is authenticated");
       setIsLoggedIn(true);
       setUser(response.data);
       setLoading(false);
