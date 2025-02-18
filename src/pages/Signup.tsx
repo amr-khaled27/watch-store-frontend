@@ -4,6 +4,8 @@ import { UserPlus, Lock } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "@/context/useAuth";
 import { showToast } from "../utils/toast";
+import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Signup() {
   const auth = useAuth();
@@ -66,6 +68,12 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen animate-fade-in bg-background text-text flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Link
+        to="/"
+        className="text-center text-xl w-10 h-10 hover:bg-gray-600/50 transition-colors duration-150 flex justify-center items-center rounded-md fixed right-4 top-4"
+      >
+        <FontAwesomeIcon icon={faAngleLeft} />
+      </Link>
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 relative">

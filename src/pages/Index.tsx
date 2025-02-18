@@ -2,6 +2,8 @@ import NavHeader from "@/components/NavHeader";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Product from "@/components/Product";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
 interface Product {
   id: string;

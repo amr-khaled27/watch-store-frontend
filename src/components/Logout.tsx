@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useAuth } from "@/context/useAuth";
+import { showToast } from "@/utils/toast";
 
 const Logout: React.FC = () => {
   const auth = useAuth();
@@ -13,6 +14,7 @@ const Logout: React.FC = () => {
     );
     console.log(response.data);
     if (response.status === 200) {
+      showToast.success("Logout successful");
       auth.setIsLoggedIn(false);
       auth.setUser(null);
     }
