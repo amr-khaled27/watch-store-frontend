@@ -98,10 +98,10 @@ This project is a modern ecommerce storefront for a watch store, built using Rea
     ```
     
 2.  Navigate to the project directory:
-    
-   ``` bash
+
+    ``` bash
     cd watch-store
-   ```
+    ```
     
 3.  Install dependencies:
     
